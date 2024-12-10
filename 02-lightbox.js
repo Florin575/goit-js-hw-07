@@ -1,11 +1,13 @@
-import { galleryItems } from './gallery-items.js';
-// Change code below this line
+import { galleryItems } from './gallery-items.js'; // Presupunem că acest fișier conține datele imaginilor
 
+// Selectează elementul <ul> pentru galerie
 const galleryContainer = document.querySelector('.gallery');
-const galleryMarkup = createGalleryMarkup(galleryItems);
 
+// Creează și inserează elementele galeriei în pagină
+const galleryMarkup = createGalleryMarkup(galleryItems);
 galleryContainer.innerHTML = galleryMarkup;
 
+// Funcția care creează HTML-ul galeriei
 function createGalleryMarkup(items) {
   return items
     .map(
@@ -23,10 +25,11 @@ function createGalleryMarkup(items) {
     .join('');
 }
 
-// Initialize SimpleLightbox
+// Inițializează SimpleLightbox
 const lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
+  captionsData: 'alt',  // Afișează descrierea din atributul "alt" al imaginii
+  captionDelay: 250,     // Adaugă o întârziere de 250ms pentru apariția descrierii
+  enableKeyboard: true,  // Permite navigarea cu tastatura (stânga/dreapta)
 });
 
 console.log(galleryItems);

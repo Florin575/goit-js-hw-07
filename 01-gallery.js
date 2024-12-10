@@ -1,52 +1,32 @@
 import { galleryItems } from './gallery-items.js';
-// Change code below this line
+// Selectează elementul <ul> pentru galerie
+const listEl = document.querySelector('.gallery');
 
-const galleryContainer = document.querySelector('.gallery');
-const galleryMarkup = createGalleryMarkup(galleryItems);
+// Creează și inserează elementele galeriei în pagină
+const galleryMarkup = galleryItems
+  .map(
+    item => `
+    <li class="gallery__item">
+      <a class="gallery__link" href="${item.original}">
+        <img class="gallery__image" src="${item.preview}" alt="${item.description}" />
+      </a>
+    </li>`
+  )
+  .join('');
+listEl.innerHTML = galleryMarkup;
 
-galleryContainer.innerHTML = galleryMarkup;
-galleryContainer.addEventListener('click', onGalleryClick);
+// Inițializează BasicLightbox pentru a deschide imaginea la dimensiune completă
+const galleryItemsEl = document.querySelectorAll('.gallery__link');
 
-function createGalleryMarkup(items) {
-  return items
-    .map(
-      ({ preview, original, description }) =>
-        `<li class="gallery__item">
-          <a class="gallery__link" href="${original}">
-            <img
-              class="gallery__image"
-              src="${preview}"
-              data-source="${original}"
-              alt="${description}"
-            />
-          </a>
-        </li>`
-    )
-    .join('');
-}
+galleryItemsEl.forEach(item => {
+  item.addEventListener('click', (event) => {
+    event.preventDefault(); // Previi comportamentul implicit al linkului
+    const largeImageUrl = item.getAttribute('href');
 
-function onGalleryClick(event) {
-  event.preventDefault();
+    const lightbox = basicLightbox.create(`
+      <img src="${largeImageUrl}" alt="" />
+    `);
 
-  const isImage = event.target.classList.contains('gallery__image');
-  if (!isImage) return;
-
-  const imageSource = event.target.dataset.source;
-
-  const instance = basicLightbox.create(`
-    <img src="${imageSource}" alt="${event.target.alt}" />
-  `);
-
-  instance.show();
-
-  document.addEventListener('keydown', onEscapeClose);
-
-  function onEscapeClose(e) {
-    if (e.code === 'Escape') {
-      instance.close();
-      document.removeEventListener('keydown', onEscapeClose);
-    }
-  }
-}
-
-console.log(galleryItems);
+    lightbox.show();
+  });
+});
